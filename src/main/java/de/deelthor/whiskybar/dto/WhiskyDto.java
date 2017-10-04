@@ -57,7 +57,6 @@ public class WhiskyDto {
 
         WhiskyDto whiskyDto = (WhiskyDto) o;
 
-        if (id != null ? !id.equals(whiskyDto.id) : whiskyDto.id != null) return false;
         if (distilleryName != null ? !distilleryName.equals(whiskyDto.distilleryName) : whiskyDto.distilleryName != null)
             return false;
         if (name != null ? !name.equals(whiskyDto.name) : whiskyDto.name != null) return false;
@@ -67,8 +66,7 @@ public class WhiskyDto {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (distilleryName != null ? distilleryName.hashCode() : 0);
+        int result = distilleryName != null ? distilleryName.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (age != null ? age.hashCode() : 0);
         result = 31 * result + (strength != null ? strength.hashCode() : 0);

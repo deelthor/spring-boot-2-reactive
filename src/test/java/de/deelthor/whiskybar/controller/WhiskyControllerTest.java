@@ -1,7 +1,6 @@
-package de.deelthor.whiskybar.repository.controller;
+package de.deelthor.whiskybar.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.deelthor.whiskybar.controller.WhiskyController;
 import de.deelthor.whiskybar.dto.WhiskyDto;
 import de.deelthor.whiskybar.service.WhiskyService;
 import org.junit.Before;
