@@ -12,7 +12,7 @@ public interface WhiskyService {
 
     Set<WhiskyDto> getAllWhiskies();
 
-    WhiskyDto getById(String id);
+    WhiskyDto getWhiskyById(String id);
 
     Set<WhiskyDto> getWhiskiesByName(String name);
 

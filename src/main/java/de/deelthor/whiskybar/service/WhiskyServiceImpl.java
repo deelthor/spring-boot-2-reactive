@@ -53,7 +53,7 @@ public class WhiskyServiceImpl implements WhiskyService {
     }
 
     @Override
-    public WhiskyDto getById(String id) {
+    public WhiskyDto getWhiskyById(String id) {
         return whiskyToWhiskyDto.convert(whiskyRepository.findById(UUID.fromString(id)));
     }
 

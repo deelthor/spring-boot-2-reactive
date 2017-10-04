@@ -30,7 +30,7 @@ public class WhiskyController {
 
     @GetMapping("/whiskies/{id}")
     public WhiskyDto getWhisky(@PathVariable String id) {
-        return whiskyService.getById(id);
+        return whiskyService.getWhiskyById(id);
     }
 
     @DeleteMapping("/whiskies/{id}")

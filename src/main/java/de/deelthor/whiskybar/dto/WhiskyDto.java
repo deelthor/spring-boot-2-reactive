@@ -49,4 +49,29 @@ public class WhiskyDto {
     public void setStrength(Double strength) {
         this.strength = strength;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WhiskyDto whiskyDto = (WhiskyDto) o;
+
+        if (id != null ? !id.equals(whiskyDto.id) : whiskyDto.id != null) return false;
+        if (distilleryName != null ? !distilleryName.equals(whiskyDto.distilleryName) : whiskyDto.distilleryName != null)
+            return false;
+        if (name != null ? !name.equals(whiskyDto.name) : whiskyDto.name != null) return false;
+        if (age != null ? !age.equals(whiskyDto.age) : whiskyDto.age != null) return false;
+        return strength != null ? strength.equals(whiskyDto.strength) : whiskyDto.strength == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (distilleryName != null ? distilleryName.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (age != null ? age.hashCode() : 0);
+        result = 31 * result + (strength != null ? strength.hashCode() : 0);
+        return result;
+    }
 }
