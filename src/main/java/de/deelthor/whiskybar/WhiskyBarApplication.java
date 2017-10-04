@@ -1,6 +1,6 @@
 package de.deelthor.whiskybar;
 
-import de.deelthor.whiskybar.domain.Whisky;
+import de.deelthor.whiskybar.entity.Whisky;
 import de.deelthor.whiskybar.repository.WhiskyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;

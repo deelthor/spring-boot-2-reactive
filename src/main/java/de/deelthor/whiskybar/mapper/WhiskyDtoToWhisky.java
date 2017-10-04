@@ -1,9 +1,10 @@
 package de.deelthor.whiskybar.mapper;
 
-import de.deelthor.whiskybar.domain.Whisky;
+import de.deelthor.whiskybar.entity.Whisky;
 import de.deelthor.whiskybar.dto.WhiskyDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class WhiskyDtoToWhisky implements Converter<WhiskyDto, Whisky> {
