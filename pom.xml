@@ -17,9 +17,9 @@
     </parent>
 
     <modules>
-        <module>whiskybar-service</module>
-        <module>whiskybar-client</module>
+        <module>whiskybar-producer</module>
+        <module>whiskybar-consumer</module>
     </modules>
 
-   
+
 </project>
