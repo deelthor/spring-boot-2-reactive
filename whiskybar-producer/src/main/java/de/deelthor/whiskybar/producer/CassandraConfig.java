@@ -40,6 +40,6 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
 
     @Override
     public String[] getEntityBasePackages() {
-        return new String[]{"de.deelthor.whiskybar.entity"};
+        return new String[]{"de.deelthor.whiskybar.producer.entity"};
     }
 }
