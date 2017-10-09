@@ -6,6 +6,7 @@ import de.deelthor.whiskybar.producer.mapper.WhiskyDtoToWhisky;
 import de.deelthor.whiskybar.producer.mapper.WhiskyToWhiskyDto;
 import de.deelthor.whiskybar.producer.repository.WhiskyRepository;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.Set;
 import java.util.UUID;
@@ -31,21 +32,21 @@ public class WhiskyServiceImpl implements WhiskyService {
     @Override
     public WhiskyDto addWhisky(WhiskyDto whiskyDto) {
         Whisky whisky = whiskyDtoToWhisky.convert(whiskyDto);
-        Whisky newWhisky = whiskyRepository.save(whisky);
-        return whiskyToWhiskyDto.convert(newWhisky);
+        Mono<Whisky> newWhisky = whiskyRepository.save(whisky);
+        return whiskyToWhiskyDto.convert(newWhisky.block());
     }
 
     @Override
     public WhiskyDto updateWhisky(WhiskyDto whiskyDto, String id) {
         Whisky whisky = whiskyDtoToWhisky.convert(whiskyDto);
         whisky.setId(UUID.fromString(id));
-        Whisky updated = whiskyRepository.save(whisky);
-        return whiskyToWhiskyDto.convert(updated);
+        Mono<Whisky> updated = whiskyRepository.save(whisky);
+        return whiskyToWhiskyDto.convert(updated.block());
     }
 
     @Override
     public Set<WhiskyDto> getAllWhiskies() {
-        return StreamSupport.stream(whiskyRepository.findAll()
+        return StreamSupport.stream(whiskyRepository.findAll().toIterable()
                 .spliterator(), false)
                 .map(whiskyToWhiskyDto::convert)
                 .collect(toSet());
@@ -53,12 +54,13 @@ public class WhiskyServiceImpl implements WhiskyService {
 
     @Override
     public WhiskyDto getWhiskyById(String id) {
-        return whiskyToWhiskyDto.convert(whiskyRepository.findById(UUID.fromString(id)));
+        WhiskyDto whisky = whiskyToWhiskyDto.convert(whiskyRepository.findById(UUID.fromString(id)).block());
+        return whisky;
     }
 
     @Override
     public Set<WhiskyDto> getWhiskiesByName(String name) {
-        return StreamSupport.stream(whiskyRepository.findByName(name)
+        return StreamSupport.stream(whiskyRepository.findByName(name).toIterable()
                 .spliterator(), false)
                 .map(whiskyToWhiskyDto::convert)
                 .collect(toSet());
@@ -66,7 +68,7 @@ public class WhiskyServiceImpl implements WhiskyService {
 
     @Override
     public Set<WhiskyDto> getWhiskiesByDistillery(String distilleryName) {
-        return StreamSupport.stream(whiskyRepository.findByDistilleryName(distilleryName)
+        return StreamSupport.stream(whiskyRepository.findByDistilleryName(distilleryName).toIterable()
                 .spliterator(), false)
                 .map(whiskyToWhiskyDto::convert)
                 .collect(toSet());
@@ -74,7 +76,7 @@ public class WhiskyServiceImpl implements WhiskyService {
 
     @Override
     public void delete(String id) {
-        Whisky whisky = whiskyRepository.findById(UUID.fromString(id));
+        Whisky whisky = whiskyRepository.findById(UUID.fromString(id)).block();
         whiskyRepository.delete(whisky);
     }
 }

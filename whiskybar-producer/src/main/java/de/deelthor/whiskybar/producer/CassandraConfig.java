@@ -1,20 +1,19 @@
 package de.deelthor.whiskybar.producer;
 
-import org.springframework.cassandra.core.keyspace.CreateKeyspaceSpecification;
-import org.springframework.cassandra.core.keyspace.DropKeyspaceSpecification;
-import org.springframework.cassandra.core.keyspace.KeyspaceOption;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.cassandra.config.AbstractReactiveCassandraConfiguration;
 import org.springframework.data.cassandra.config.SchemaAction;
-import org.springframework.data.cassandra.config.java.AbstractCassandraConfiguration;
-import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
+import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecification;
+import org.springframework.data.cassandra.core.cql.keyspace.DropKeyspaceSpecification;
+import org.springframework.data.cassandra.core.cql.keyspace.KeyspaceOption;
+import org.springframework.data.cassandra.repository.config.EnableReactiveCassandraRepositories;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@EnableCassandraRepositories(
-        basePackages = "de.deelthor.whiskybar.producer.repository")
-public class CassandraConfig extends AbstractCassandraConfiguration {
+@EnableReactiveCassandraRepositories(basePackages = "de.deelthor.whiskybar.producer.repository")
+public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
 
     @Override
     public SchemaAction getSchemaAction() {

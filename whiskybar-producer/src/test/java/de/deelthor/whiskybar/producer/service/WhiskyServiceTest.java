@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -51,7 +53,7 @@ public class WhiskyServiceTest {
     @Test
     public void getAllWhiskies() throws Exception {
         Whisky whisky = getWhisky();
-        when(whiskyRepository.findAll()).thenReturn(Arrays.asList(whisky));
+        when(whiskyRepository.findAll()).thenReturn(Flux.just((whisky)));
         when(whiskyToWhiskyDto.convert(whisky)).thenCallRealMethod();
 
         Set<WhiskyDto> allWhiskies = whiskyService.getAllWhiskies();
@@ -64,7 +66,7 @@ public class WhiskyServiceTest {
     @Test
     public void getWhiskyById() throws Exception {
         Whisky whisky = getWhisky();
-        when(whiskyRepository.findById(ID)).thenReturn(whisky);
+        when(whiskyRepository.findById(ID)).thenReturn(Mono.just(whisky));
         when(whiskyToWhiskyDto.convert(whisky)).thenCallRealMethod();
 
         WhiskyDto whiskyDto = whiskyService.getWhiskyById(ID.toString());
@@ -77,7 +79,7 @@ public class WhiskyServiceTest {
     @Test
     public void getWhiskiesByName() throws Exception {
         Whisky whisky = getWhisky();
-        when(whiskyRepository.findByName(NAME)).thenReturn(Arrays.asList(whisky));
+        when(whiskyRepository.findByName(NAME)).thenReturn(Flux.just(whisky));
         when(whiskyToWhiskyDto.convert(whisky)).thenCallRealMethod();
 
         Set<WhiskyDto> allWhiskies = whiskyService.getWhiskiesByName(NAME);
@@ -90,7 +92,7 @@ public class WhiskyServiceTest {
     @Test
     public void getWhiskiesByDistilleryName() throws Exception {
         Whisky whisky = getWhisky();
-        when(whiskyRepository.findByDistilleryName(DISTILLERY_NAME)).thenReturn(Arrays.asList(whisky));
+        when(whiskyRepository.findByDistilleryName(DISTILLERY_NAME)).thenReturn(Flux.just(whisky));
         when(whiskyToWhiskyDto.convert(whisky)).thenCallRealMethod();
 
         Set<WhiskyDto> allWhiskies = whiskyService.getWhiskiesByDistillery(DISTILLERY_NAME);
@@ -104,7 +106,7 @@ public class WhiskyServiceTest {
     public void addWhisky() throws Exception {
         Whisky whisky = getWhisky();
         WhiskyDto whiskyDto = getWhiskyDto();
-        when(whiskyRepository.save(whisky)).thenReturn(whisky);
+        when(whiskyRepository.save(whisky)).thenReturn(Mono.just(whisky));
         when(whiskyToWhiskyDto.convert(whisky)).thenCallRealMethod();
         when(whiskyDtoToWhisky.convert(whiskyDto)).thenCallRealMethod();
 
@@ -120,7 +122,7 @@ public class WhiskyServiceTest {
     public void updateWhisky() throws Exception {
         Whisky whisky = getWhisky();
         WhiskyDto whiskyDto = getWhiskyDto();
-        when(whiskyRepository.save(whisky)).thenReturn(whisky);
+        when(whiskyRepository.save(whisky)).thenReturn(Mono.just(whisky));
         when(whiskyToWhiskyDto.convert(whisky)).thenCallRealMethod();
         when(whiskyDtoToWhisky.convert(whiskyDto)).thenCallRealMethod();
 
@@ -135,7 +137,7 @@ public class WhiskyServiceTest {
     @Test
     public void deleteWhisky() throws Exception {
         Whisky whisky = getWhisky();
-        when(whiskyRepository.findById(ID)).thenReturn(whisky);
+        when(whiskyRepository.findById(ID)).thenReturn(Mono.just(whisky));
 
         whiskyService.delete(ID.toString());
 
