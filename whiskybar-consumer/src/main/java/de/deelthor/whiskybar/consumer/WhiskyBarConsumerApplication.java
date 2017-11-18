@@ -36,12 +36,13 @@ public class WhiskyBarConsumerApplication implements ApplicationListener<Context
     public void onApplicationEvent(ContextRefreshedEvent event) {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
+        // Produce whiskies
+
         WhiskyDto whisky1 = new WhiskyDto();
         whisky1.setDistilleryName("Ardbeg");
         whisky1.setName("Ten");
         whisky1.setAge(10);
         whisky1.setStrength(46.0);
-
         restTemplate.postForEntity(whiskyProducerUri, whisky1, WhiskyDto.class);
 
 
@@ -57,6 +58,9 @@ public class WhiskyBarConsumerApplication implements ApplicationListener<Context
         whisky3.setStrength(58.5);
         whisky3.setAge(5);
         restTemplate.postForEntity(whiskyProducerUri, whisky3, WhiskyDto.class);
+
+
+        // Consume all whiskies
 
         WhiskyDto[] whiskies = restTemplate.getForObject(whiskyProducerUri, WhiskyDto[].class);
         LOG.info("========================================");
