@@ -17,7 +17,7 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
 
     @Override
     public SchemaAction getSchemaAction() {
-        return SchemaAction.CREATE_IF_NOT_EXISTS;
+        return SchemaAction.RECREATE;
     }
 
     @Override
