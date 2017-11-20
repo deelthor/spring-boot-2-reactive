@@ -11,9 +11,17 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class WhiskyBarConsumerApplication implements ApplicationListener<ContextRefreshedEvent> {
@@ -23,7 +31,6 @@ public class WhiskyBarConsumerApplication implements ApplicationListener<Context
     @Autowired
     private RestTemplateBuilder restTemplateBuilder;
     private URI whiskyProducerUri = new URI("http://localhost:8080/whiskies");
-    ;
 
     public WhiskyBarConsumerApplication() throws URISyntaxException {
     }
@@ -37,37 +44,40 @@ public class WhiskyBarConsumerApplication implements ApplicationListener<Context
         RestTemplate restTemplate = restTemplateBuilder.build();
 
         // Produce whiskies
-
-        WhiskyDto whisky1 = new WhiskyDto();
-        whisky1.setDistilleryName("Ardbeg");
-        whisky1.setName("Ten");
-        whisky1.setAge(10);
-        whisky1.setStrength(46.0);
-        restTemplate.postForEntity(whiskyProducerUri, whisky1, WhiskyDto.class);
-
-
-        WhiskyDto whisky2 = new WhiskyDto();
-        whisky2.setDistilleryName("Laphroaig");
-        whisky2.setName("Quarter Cask");
-        whisky2.setStrength(48.0);
-        restTemplate.postForEntity(whiskyProducerUri, whisky2, WhiskyDto.class);
-
-        WhiskyDto whisky3 = new WhiskyDto();
-        whisky3.setDistilleryName("Bruichladdich");
-        whisky3.setName("Octomore 07.2");
-        whisky3.setStrength(58.5);
-        whisky3.setAge(5);
-        restTemplate.postForEntity(whiskyProducerUri, whisky3, WhiskyDto.class);
-
+        processInputFile("whiskies.csv").forEach(whiskyDto -> restTemplate.postForEntity(whiskyProducerUri, whiskyDto, WhiskyDto.class));
 
         // Consume all whiskies
-
         WhiskyDto[] whiskies = restTemplate.getForObject(whiskyProducerUri, WhiskyDto[].class);
         LOG.info("========================================");
         LOG.info("Whiskies in database:");
-        for (WhiskyDto whisky : whiskies) {
-            LOG.info(whisky.toString());
-        }
+        Arrays.stream(whiskies).forEach(whisky -> LOG.info(whisky.toString()));
 
     }
+
+    private List<WhiskyDto> processInputFile(String inputFilePath) {
+        List<WhiskyDto> inputList = new ArrayList<>();
+        try {
+            URI path = getClass().getClassLoader().getResource(inputFilePath).toURI();
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path))));
+            inputList = br.lines().map(mapToWhiskyDto).collect(Collectors.toList());
+            br.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return inputList;
+    }
+
+    private Function<String, WhiskyDto> mapToWhiskyDto = (line) -> {
+        String[] whiskyLine = line.split(",");
+        WhiskyDto whisky = new WhiskyDto();
+        whisky.setDistilleryName(whiskyLine[0]);
+        whisky.setName(whiskyLine[1]);
+        if (whiskyLine[2] != null && whiskyLine[2].trim().length() > 0) {
+            whisky.setAge(Integer.valueOf(whiskyLine[2]));
+        }
+        if (whiskyLine[3] != null && whiskyLine[3].trim().length() > 0) {
+            whisky.setStrength(Double.valueOf(whiskyLine[3]));
+        }
+        return whisky;
+    };
 }
