@@ -13,14 +13,11 @@ import org.mockito.Spy;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 
@@ -58,7 +55,7 @@ public class WhiskyServiceTest {
 
         Long whiskyCount = whiskyService.getAllWhiskies().count().block();
 
-        assertThat(whiskyCount, is(1));
+        assertThat(whiskyCount, is(1L));
         verify(whiskyRepository, times(1)).findAll();
         verify(whiskyToWhiskyDto, times(1)).convert(whisky);
     }
@@ -84,7 +81,7 @@ public class WhiskyServiceTest {
 
         Long whiskyCount = whiskyService.getWhiskiesByName(NAME).count().block();
 
-        assertThat(whiskyCount, is(1));
+        assertThat(whiskyCount, is(1L));
         verify(whiskyRepository, times(1)).findByName(NAME);
         verify(whiskyToWhiskyDto, times(1)).convert(whisky);
     }
@@ -97,7 +94,7 @@ public class WhiskyServiceTest {
 
         Long allWhiskies = whiskyService.getWhiskiesByDistillery(DISTILLERY_NAME).count().block();
 
-        assertThat(allWhiskies, is(1));
+        assertThat(allWhiskies, is(1L));
         verify(whiskyRepository, times(1)).findByDistilleryName(DISTILLERY_NAME);
         verify(whiskyToWhiskyDto, times(1)).convert(whisky);
     }
