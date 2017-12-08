@@ -10,9 +10,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.HashSet;
-import java.util.Set;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -45,9 +44,7 @@ public class WhiskyControllerTest {
 
     @Test
     public void getAllWhiskies() throws Exception {
-        Set<WhiskyDto> whiskyDtos = new HashSet<>();
-        whiskyDtos.add(getWhiskyDto());
-        when(whiskyService.getAllWhiskies()).thenReturn(whiskyDtos);
+        when(whiskyService.getAllWhiskies()).thenReturn(Flux.just(getWhiskyDto()));
 
         mockMvc.perform(get("/whiskies"))
                 .andExpect(status().isOk())
@@ -59,7 +56,7 @@ public class WhiskyControllerTest {
     @Test
     public void getWhiskyById() throws Exception {
         WhiskyDto whiskyDto = getWhiskyDto();
-        when(whiskyService.getWhiskyById("12345")).thenReturn(whiskyDto);
+        when(whiskyService.getWhiskyById("12345")).thenReturn(Mono.just(whiskyDto));
 
         mockMvc.perform(get("/whiskies/12345"))
                 .andExpect(status().isOk())
@@ -70,10 +67,7 @@ public class WhiskyControllerTest {
 
     @Test
     public void getWhiskiesByName() throws Exception {
-        Set<WhiskyDto> whiskyDtos = new HashSet<>();
-        WhiskyDto whiskyDto = getWhiskyDto();
-        whiskyDtos.add(whiskyDto);
-        when(whiskyService.getWhiskiesByName(NAME)).thenReturn(whiskyDtos);
+        when(whiskyService.getWhiskiesByName(NAME)).thenReturn(Flux.just(getWhiskyDto()));
 
         mockMvc.perform(get("/whiskies?name=" + NAME))
                 .andExpect(status().isOk())
@@ -84,10 +78,7 @@ public class WhiskyControllerTest {
 
     @Test
     public void getWhiskiesByDistilleryName() throws Exception {
-        Set<WhiskyDto> whiskyDtos = new HashSet<>();
-        WhiskyDto whiskyDto = getWhiskyDto();
-        whiskyDtos.add(whiskyDto);
-        when(whiskyService.getWhiskiesByDistillery(DISTILLERY_NAME)).thenReturn(whiskyDtos);
+        when(whiskyService.getWhiskiesByDistillery(DISTILLERY_NAME)).thenReturn(Flux.just(getWhiskyDto()));
 
         mockMvc.perform(get("/whiskies?distilleryName=" + DISTILLERY_NAME))
                 .andExpect(status().isOk())
@@ -107,7 +98,7 @@ public class WhiskyControllerTest {
     @Test
     public void addWhisky() throws Exception {
         WhiskyDto whiskyDto = getWhiskyDto();
-        when(whiskyService.addWhisky(whiskyDto)).thenReturn(whiskyDto);
+        when(whiskyService.addWhisky(whiskyDto)).thenReturn(Mono.just(whiskyDto));
 
         mockMvc.perform(post("/whiskies")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -121,7 +112,7 @@ public class WhiskyControllerTest {
     @Test
     public void updateWhisky() throws Exception {
         WhiskyDto whiskyDto = getWhiskyDto();
-        when(whiskyService.updateWhisky(whiskyDto, "12345")).thenReturn(whiskyDto);
+        when(whiskyService.updateWhisky(whiskyDto, "12345")).thenReturn(Mono.just(whiskyDto));
 
         mockMvc.perform(put("/whiskies/12345")
                 .contentType(MediaType.APPLICATION_JSON)

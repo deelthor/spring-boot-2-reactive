@@ -1,22 +1,24 @@
 package de.deelthor.whiskybar.producer.service;
 
 import de.deelthor.whiskybar.producer.dto.WhiskyDto;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Set;
 
 public interface WhiskyService {
 
-    WhiskyDto addWhisky(WhiskyDto whisky);
+    Mono<WhiskyDto> addWhisky(WhiskyDto whisky);
 
-    WhiskyDto updateWhisky(WhiskyDto whisky, String id);
+    Mono<WhiskyDto> updateWhisky(WhiskyDto whisky, String id);
 
-    Set<WhiskyDto> getAllWhiskies();
+    Flux<WhiskyDto> getAllWhiskies();
 
-    WhiskyDto getWhiskyById(String id);
+    Mono<WhiskyDto> getWhiskyById(String id);
 
-    Set<WhiskyDto> getWhiskiesByName(String name);
+    Flux<WhiskyDto> getWhiskiesByName(String name);
 
-    Set<WhiskyDto> getWhiskiesByDistillery(String distilleryName);
+    Flux<WhiskyDto> getWhiskiesByDistillery(String distilleryName);
 
     void delete(String id);
 }

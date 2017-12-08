@@ -6,6 +6,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 public class WhiskyController {
@@ -20,17 +22,17 @@ public class WhiskyController {
     public Set<WhiskyDto> getAllWhiskies(@RequestParam(required = false) String name,
                                          @RequestParam(required = false) String distilleryName) {
         if (!StringUtils.isEmpty(name)) {
-            return whiskyService.getWhiskiesByName(name);
+            return whiskyService.getWhiskiesByName(name).toStream().collect(Collectors.toSet());
         }
         if (!StringUtils.isEmpty(distilleryName)) {
-            return whiskyService.getWhiskiesByDistillery(distilleryName);
+            return whiskyService.getWhiskiesByDistillery(distilleryName).toStream().collect(Collectors.toSet());
         }
-        return whiskyService.getAllWhiskies();
+        return whiskyService.getAllWhiskies().toStream().collect(Collectors.toSet());
     }
 
     @GetMapping("/whiskies/{id}")
     public WhiskyDto getWhisky(@PathVariable String id) {
-        return whiskyService.getWhiskyById(id);
+        return whiskyService.getWhiskyById(id).block();
     }
 
     @DeleteMapping("/whiskies/{id}")
@@ -40,12 +42,12 @@ public class WhiskyController {
 
     @PostMapping("/whiskies")
     public WhiskyDto newWhisky(@RequestBody WhiskyDto whiskyDto) {
-        return whiskyService.addWhisky(whiskyDto);
+        return whiskyService.addWhisky(whiskyDto).block();
     }
 
     @PutMapping("/whiskies/{id}")
     public WhiskyDto updateWhisky(@RequestBody WhiskyDto whiskyDto, @PathVariable String id) {
-        return whiskyService.updateWhisky(whiskyDto, id);
+        return whiskyService.updateWhisky(whiskyDto, id).block();
     }
 
 }
