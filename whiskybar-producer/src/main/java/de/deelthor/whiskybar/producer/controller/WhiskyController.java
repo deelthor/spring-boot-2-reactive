@@ -22,12 +22,12 @@ public class WhiskyController {
     public Set<WhiskyDto> getAllWhiskies(@RequestParam(required = false) String name,
                                          @RequestParam(required = false) String distilleryName) {
         if (!StringUtils.isEmpty(name)) {
-            return whiskyService.getWhiskiesByName(name).toStream().collect(Collectors.toSet());
+            return whiskyService.getWhiskiesByName(name).collect(Collectors.toSet()).block();
         }
         if (!StringUtils.isEmpty(distilleryName)) {
-            return whiskyService.getWhiskiesByDistillery(distilleryName).toStream().collect(Collectors.toSet());
+            return whiskyService.getWhiskiesByDistillery(distilleryName).collect(Collectors.toSet()).block();
         }
-        return whiskyService.getAllWhiskies().toStream().collect(Collectors.toSet());
+        return whiskyService.getAllWhiskies().collect(Collectors.toSet()).block();
     }
 
     @GetMapping("/whiskies/{id}")
